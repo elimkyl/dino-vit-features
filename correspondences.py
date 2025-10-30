@@ -34,14 +34,18 @@ def find_correspondences(image_path1: str, image_path2: str, num_pairs: int = 10
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     extractor = ViTExtractor(model_type, stride, device=device)
     image1_batch, image1_pil = extractor.preprocess(image_path1, load_size)
+    print("[LOG] Extracting descriptors for image 1")
     descriptors1 = extractor.extract_descriptors(image1_batch.to(device), layer, facet, bin)
     num_patches1, load_size1 = extractor.num_patches, extractor.load_size
     image2_batch, image2_pil = extractor.preprocess(image_path2, load_size)
+    print("[LOG] Extracting descriptors for image 2")
     descriptors2 = extractor.extract_descriptors(image2_batch.to(device), layer, facet, bin)
     num_patches2, load_size2 = extractor.num_patches, extractor.load_size
 
     # extracting saliency maps for each image
+    print("[LOG] Extracting saliency maps for image 1")
     saliency_map1 = extractor.extract_saliency_maps(image1_batch.to(device))[0]
+    print("[LOG] Extracting saliency maps for image 2")
     saliency_map2 = extractor.extract_saliency_maps(image2_batch.to(device))[0]
     # threshold saliency maps to get fg / bg masks
     fg_mask1 = saliency_map1 > thresh

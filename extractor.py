@@ -221,7 +221,9 @@ class ViTExtractor:
         B, C, H, W = batch.shape
         self._feats = []
         self._register_hooks(layers, facet)
+        print("[LOG] Starting model")
         _ = self.model(batch)
+        print("[LOG] Ending model")
         self._unregister_hooks()
         self.load_size = (H, W)
         self.num_patches = (1 + (H - self.p) // self.stride[0], 1 + (W - self.p) // self.stride[1])
